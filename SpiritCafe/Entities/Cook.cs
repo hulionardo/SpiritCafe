@@ -10,7 +10,12 @@ public class Cook
 
     [Required]
     [MaxLength(100)]
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public bool IsAvailable { get; set; } = true;
+    
+    public int CurrentWorkload { get; set; } = 0;
+    public int MaxWorkload { get; set; } = 5;
 }
