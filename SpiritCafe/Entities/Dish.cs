@@ -23,4 +23,6 @@ public class Dish
     public int EstTime { get; set; }
 
     public virtual ICollection<DishIngredient> DishIngredients { get; set; } = new List<DishIngredient>();
+
+    public void UpdatePrice() => Price = DishIngredients.Sum(di => di.Ingredient.Price) * 1.2m;
 }

@@ -8,5 +8,12 @@ public class OrderDetails
     [Key]
     public int Id { get; set; }
     [Required]
-    public virtual ICollection<OrderDetailsDish> OrderDetailsDishes { get; set; } = new List<OrderDetailsDish>();
+    public int OrderId { get; set; }
+    public virtual Order Order { get; set; }
+
+    [Required]
+    public int DishId { get; set; }
+    public virtual Dish Dish { get; set; }
+    public decimal Price { get; set; } 
 }
+
