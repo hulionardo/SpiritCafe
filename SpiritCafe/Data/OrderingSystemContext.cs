@@ -13,7 +13,7 @@ public class OrderingSystemContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=restaurant.db");
+        optionsBuilder.UseSqlite("Data Source=SpiritCafe.db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,8 +36,8 @@ public class OrderingSystemContext : DbContext
             );
 
         modelBuilder.Entity<Dish>().HasData(
-            new Dish { Id = 1, Name = "Pizza", Description = "Delicious cheesy pizza", EstTime = 15, Price = 4.8m }, // Price will be updated later
-            new Dish { Id = 2, Name = "Pasta", Description = "Creamy Alfredo Pasta", EstTime = 10, Price = 1.8m } // Price will be updated later
+            new Dish { Id = 1, Name = "Pizza", Description = "Delicious cheesy pizza", EstTime = 15, Price = 4.8m }, 
+            new Dish { Id = 2, Name = "Pasta", Description = "Creamy Alfredo Pasta", EstTime = 10, Price = 1.8m }
             );
 
         modelBuilder.Entity<DishIngredient>().HasData(
@@ -45,16 +45,6 @@ public class OrderingSystemContext : DbContext
             new DishIngredient { DishId = 1, IngredientId = 2 },  
             new DishIngredient { DishId = 1, IngredientId = 3 },  
             new DishIngredient { DishId = 2, IngredientId = 2 }
-            );
-
-        modelBuilder.Entity<Order>().HasData(
-            new Order { Id = 1, OrderDate = new DateTime(2021, 1, 1), CookId = 1 },
-            new Order { Id = 2, OrderDate = new DateTime(2021, 1, 2), CookId = 2 }
-            );
-
-        modelBuilder.Entity<OrderDetails>().HasData(
-            new OrderDetails { Id = 1, OrderId = 1, DishId = 1, Price = 4.8m },
-            new OrderDetails { Id = 2, OrderId = 2, DishId = 2, Price = 1.8m }
             );
         }
     }

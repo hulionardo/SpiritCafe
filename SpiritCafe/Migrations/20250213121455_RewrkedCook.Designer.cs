@@ -11,8 +11,8 @@ using SpiritCafe.Data;
 namespace SpiritCafe.Migrations
 {
     [DbContext(typeof(OrderingSystemContext))]
-    [Migration("20250212220001_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20250213121455_RewrkedCook")]
+    partial class RewrkedCook
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,12 @@ namespace SpiritCafe.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CurrentWorkload")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsAvailable")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -39,11 +45,15 @@ namespace SpiritCafe.Migrations
                         new
                         {
                             Id = 1,
+                            CurrentWorkload = 0,
+                            IsAvailable = true,
                             Name = "Chef Gordon"
                         },
                         new
                         {
                             Id = 2,
+                            CurrentWorkload = 0,
+                            IsAvailable = true,
                             Name = "Chef Jamie"
                         });
                 });

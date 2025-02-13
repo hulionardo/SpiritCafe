@@ -8,7 +8,10 @@ public class Order
     public int Id { get; set; }
 
     [Required]
-    public DateTime OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
+
+    [Required]
+    public DateTime? OrderCompletionTime { get; set; }
 
     [Required]
     public int CookId { get; set; }

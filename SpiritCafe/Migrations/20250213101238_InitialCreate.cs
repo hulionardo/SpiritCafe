@@ -19,7 +19,10 @@ namespace SpiritCafe.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    IsAvailable = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CurrentWorkload = table.Column<int>(type: "INTEGER", nullable: false),
+                    MaxWorkload = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,51 +107,35 @@ namespace SpiritCafe.Migrations
                 name: "OrderDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    OrderId = table.Column<int>(type: "INTEGER", nullable: true)
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DishId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                    table.PrimaryKey("PK_OrderDetails", x => new { x.OrderId, x.DishId });
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderDetailsDishes",
-                columns: table => new
-                {
-                    OrderDetailsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DishId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderDetailsDishes", x => new { x.OrderDetailsId, x.DishId });
-                    table.ForeignKey(
-                        name: "FK_OrderDetailsDishes_Dishes_DishId",
+                        name: "FK_OrderDetails_Dishes_DishId",
                         column: x => x.DishId,
                         principalTable: "Dishes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderDetailsDishes_OrderDetails_OrderDetailsId",
-                        column: x => x.OrderDetailsId,
-                        principalTable: "OrderDetails",
+                        name: "FK_OrderDetails_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Cooks",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "CurrentWorkload", "IsAvailable", "MaxWorkload", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Chef Gordon" },
-                    { 2, "Chef Jamie" }
+                    { 1, 0, true, 5, "Chef Gordon" },
+                    { 2, 0, true, 5, "Chef Jamie" }
                 });
 
             migrationBuilder.InsertData(
@@ -156,8 +143,8 @@ namespace SpiritCafe.Migrations
                 columns: new[] { "Id", "Description", "EstTime", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, "Delicious cheesy pizza", 15, "Pizza", 10.5m },
-                    { 2, "Creamy Alfredo Pasta", 10, "Pasta", 5.5m }
+                    { 1, "Delicious cheesy pizza", 15, "Pizza", 4.8m },
+                    { 2, "Creamy Alfredo Pasta", 10, "Pasta", 1.8m }
                 });
 
             migrationBuilder.InsertData(
@@ -168,15 +155,6 @@ namespace SpiritCafe.Migrations
                     { 1, "Tomato", 0.5m },
                     { 2, "Cheese", 1.5m },
                     { 3, "Dough", 2.0m }
-                });
-
-            migrationBuilder.InsertData(
-                table: "OrderDetails",
-                columns: new[] { "Id", "OrderId" },
-                values: new object[,]
-                {
-                    { 1, null },
-                    { 2, null }
                 });
 
             migrationBuilder.InsertData(
@@ -191,15 +169,6 @@ namespace SpiritCafe.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "OrderDetailsDishes",
-                columns: new[] { "DishId", "OrderDetailsId" },
-                values: new object[,]
-                {
-                    { 1, 1 },
-                    { 2, 2 }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CookId", "OrderDate" },
                 values: new object[,]
@@ -208,19 +177,23 @@ namespace SpiritCafe.Migrations
                     { 2, 2, new DateTime(2021, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
+            migrationBuilder.InsertData(
+                table: "OrderDetails",
+                columns: new[] { "DishId", "OrderId", "Id", "Price" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, 4.8m },
+                    { 2, 2, 2, 1.8m }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_DishIngredients_IngredientId",
                 table: "DishIngredients",
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_OrderId",
+                name: "IX_OrderDetails_DishId",
                 table: "OrderDetails",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderDetailsDishes_DishId",
-                table: "OrderDetailsDishes",
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
@@ -236,16 +209,13 @@ namespace SpiritCafe.Migrations
                 name: "DishIngredients");
 
             migrationBuilder.DropTable(
-                name: "OrderDetailsDishes");
+                name: "OrderDetails");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");
 
             migrationBuilder.DropTable(
                 name: "Dishes");
-
-            migrationBuilder.DropTable(
-                name: "OrderDetails");
 
             migrationBuilder.DropTable(
                 name: "Orders");

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace SpiritCafe.Entities;
 public class Cook
 {
-    private static int s_maxCurrentDishes = 5;
+    public readonly static int s_maxWorkLoad = 5;
 
     [Key]
     public int Id { get; set; }
@@ -17,5 +17,4 @@ public class Cook
     public bool IsAvailable { get; set; } = true;
     
     public int CurrentWorkload { get; set; } = 0;
-    public int MaxWorkload { get; set; } = 5;
 }

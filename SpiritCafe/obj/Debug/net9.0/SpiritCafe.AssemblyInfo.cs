@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpiritCafe")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a4e789b812922fb931601c88141484f6d9f1ad7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3565a910ca700a0f4886604445e8c8fd2fadb70b")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpiritCafe")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpiritCafe")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

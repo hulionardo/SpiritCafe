@@ -4,6 +4,5 @@ using SpiritCafe;
 
 using (var context = new OrderingSystemContext())
         {
-            Menu.LoadDishes(context); 
-            Menu.Start();
+            Menu.Start(context);
         }

@@ -11,7 +11,7 @@ using SpiritCafe.Data;
 namespace SpiritCafe.Migrations
 {
     [DbContext(typeof(OrderingSystemContext))]
-    [Migration("20250212212707_InitialCreate")]
+    [Migration("20250213101238_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,15 @@ namespace SpiritCafe.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CurrentWorkload")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxWorkload")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -39,11 +48,17 @@ namespace SpiritCafe.Migrations
                         new
                         {
                             Id = 1,
+                            CurrentWorkload = 0,
+                            IsAvailable = true,
+                            MaxWorkload = 5,
                             Name = "Chef Gordon"
                         },
                         new
                         {
                             Id = 2,
+                            CurrentWorkload = 0,
+                            IsAvailable = true,
+                            MaxWorkload = 5,
                             Name = "Chef Jamie"
                         });
                 });
@@ -80,7 +95,7 @@ namespace SpiritCafe.Migrations
                             Description = "Delicious cheesy pizza",
                             EstTime = 15,
                             Name = "Pizza",
-                            Price = 10.5m
+                            Price = 4.8m
                         },
                         new
                         {
@@ -88,7 +103,7 @@ namespace SpiritCafe.Migrations
                             Description = "Creamy Alfredo Pasta",
                             EstTime = 10,
                             Name = "Pasta",
-                            Price = 5.5m
+                            Price = 1.8m
                         });
                 });
 
@@ -203,54 +218,38 @@ namespace SpiritCafe.Migrations
 
             modelBuilder.Entity("SpiritCafe.Entities.OrderDetails", b =>
                 {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId", "DishId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("DishId");
 
                     b.ToTable("OrderDetails");
 
                     b.HasData(
                         new
                         {
-                            Id = 1
+                            OrderId = 1,
+                            DishId = 1,
+                            Id = 1,
+                            Price = 4.8m
                         },
                         new
                         {
-                            Id = 2
-                        });
-                });
-
-            modelBuilder.Entity("SpiritCafe.Entities.OrderDetailsDish", b =>
-                {
-                    b.Property<int>("OrderDetailsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DishId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("OrderDetailsId", "DishId");
-
-                    b.HasIndex("DishId");
-
-                    b.ToTable("OrderDetailsDishes");
-
-                    b.HasData(
-                        new
-                        {
-                            OrderDetailsId = 1,
-                            DishId = 1
-                        },
-                        new
-                        {
-                            OrderDetailsId = 2,
-                            DishId = 2
+                            OrderId = 2,
+                            DishId = 2,
+                            Id = 2,
+                            Price = 1.8m
                         });
                 });
 
@@ -286,28 +285,21 @@ namespace SpiritCafe.Migrations
 
             modelBuilder.Entity("SpiritCafe.Entities.OrderDetails", b =>
                 {
-                    b.HasOne("SpiritCafe.Entities.Order", null)
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId");
-                });
-
-            modelBuilder.Entity("SpiritCafe.Entities.OrderDetailsDish", b =>
-                {
                     b.HasOne("SpiritCafe.Entities.Dish", "Dish")
                         .WithMany()
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SpiritCafe.Entities.OrderDetails", "OrderDetails")
-                        .WithMany("OrderDetailsDishes")
-                        .HasForeignKey("OrderDetailsId")
+                    b.HasOne("SpiritCafe.Entities.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Dish");
 
-                    b.Navigation("OrderDetails");
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("SpiritCafe.Entities.Cook", b =>
@@ -328,11 +320,6 @@ namespace SpiritCafe.Migrations
             modelBuilder.Entity("SpiritCafe.Entities.Order", b =>
                 {
                     b.Navigation("OrderDetails");
-                });
-
-            modelBuilder.Entity("SpiritCafe.Entities.OrderDetails", b =>
-                {
-                    b.Navigation("OrderDetailsDishes");
                 });
 #pragma warning restore 612, 618
         }
