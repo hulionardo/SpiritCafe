@@ -53,10 +53,11 @@ namespace SpiritCafe
                         {
                             int totalEstTime = cookHandler.CalculateCookQueueEst(availableCook,selectedDish);
 
-                            Console.WriteLine($"Cook {availableCook.Name} is available to prepare the dish. Estimated total cooking time: {totalEstTime} minutes.");
-                            
+                            Console.WriteLine($"Cook {availableCook.Name} is available to prepare the dish. Estimated total cooking time: {totalEstTime} minutes.");                         
                             int orderId = CreateOrder(context, availableCook,totalEstTime); 
                             CreateOrderDetails(context, orderId, selectedDish, availableCook);
+
+                            Console.WriteLine($"if you would like to make a new order type the name of the dish, otherwise type 'exit' to quit.");   
 
                         }
                         else
